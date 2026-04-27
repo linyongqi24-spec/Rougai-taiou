@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>やわらか変換</title>
+<style>
+    body {
+        font-family: sans-serif;
+        padding: 20px;
+        background: #f5f5f5;
+    }
+    h1 {
+        text-align: center;
+    }
+    textarea {
+        width: 100%;
+        height: 120px;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .box {
+        background: white;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .stress {
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .btn {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<h1>🧓💥 やわらか変換</h1>
+
+<div class="box">
+    <h3>入力（キツい言葉）</h3>
+    <textarea id="inputText" placeholder="例：お前らは本当に使えないな"></textarea>
+    <button class="btn" onclick="convert()">変換する</button>
+</div>
+
+<div class="box">
+    <h3>やわらか翻訳</h3>
+    <div id="outputText">（ここに結果が表示されます）</div>
+</div>
+
+<div class="box">
+    <h3>ストレス度</h3>
+    <div id="stressLevel" class="stress">0</div>
+</div>
+
+<div class="box">
+    <h3>おすすめ返答</h3>
+    <div id="replyText">（ここに返答が表示されます）</div>
+</div>
+
+<script>
+function convert() {
+    const text = document.getElementById("inputText").value;
+
+    // -------------------------
+    // ① やわらか翻訳辞書
+    // -------------------------
+    const dictionary = [
+        { bad: "使えない", soft: "もっと良くなる余地がありますね" },
+        { bad: "根性が足りん", soft: "向上心を期待しているんですね" },
+        { bad: "最近の若い", soft: "世代の違いを感じているんですね" },
+        { bad: "ダメだ", soft: "改善の余地を感じているんですね" },
+        { bad: "昔はもっと", soft: "あなたの経験を共有したい気持ちですね" },
+        { bad: "お前ら", soft: "皆さん" }
+    ];
+
+    let softText = text;
+    dictionary.forEach(item => {
+        if (softText.includes(item.bad)) {
+            softText = softText.replace(item.bad, item.soft);
+        }
+    });
+
+    // -------------------------
+    // ② ストレス度（単純なスコアリング）
+    // -------------------------
+    let stress = 0;
+    const stressWords = ["使えない", "バカ", "根性", "ダメ", "若い", "昔は", "お前"];
+
+    stressWords.forEach(word => {
+        if (text.includes(word)) stress += 20;
+    });
+    if (stress > 100) stress = 100;
+
+    // -------------------------
+    // ③ おすすめ返答
+    // -------------------------
+    let reply = "ご指摘ありがとうございます。確認してみますね。";
+
+    if (stress >= 80) {
+        reply = "一度持ち帰って考えてみますね。";
+    } else if (stress >= 50) {
+        reply = "なるほど、そういう考え方もありますね。";
+    }
+
+    // -------------------------
+    // ④ 表示
+    // -------------------------
+    document.getElementById("outputText").innerText = softText;
+    document.getElementById("stressLevel").innerText = stress + " / 100";
+    document.getElementById("replyText").innerText = reply;
+}
+</script>
+
+</body>
+</html>
